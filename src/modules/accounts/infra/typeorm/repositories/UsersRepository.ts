@@ -7,6 +7,7 @@ import { User } from '../entities/User'
 class UsersRepository implements IUsersRepository {
   private repository: Repository<User>
   private usersOnline: User[] = []
+  public currentIndex = 0
 
   constructor() {
     this.repository = getRepository(User)
@@ -44,7 +45,7 @@ class UsersRepository implements IUsersRepository {
     return user
   }
 
-  updateUserOnlineList(user: User) {
+  async updateUserOnlineList(user: User) {
     if (user.isOnline) {
       this.usersOnline.push(user)
     } else {
@@ -53,6 +54,10 @@ class UsersRepository implements IUsersRepository {
         this.usersOnline.splice(index, 1)
       }
     }
+  }
+
+  async listUsersOnline(): Promise<User[]> {
+    return this.usersOnline
   }
 }
 
